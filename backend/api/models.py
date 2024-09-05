@@ -58,3 +58,57 @@ def save_user_profile(sender, instance, **kwargs):
 
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
+
+
+class Category(models.Model):
+    title = models.CharField(max_length=100)
+    image = models.FileField(upload_to="image", null=True, blank=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        verbose_name_plural = 'Category'
+
+    def save(self, *args, **kwargs):
+        if self.slug == '' or self.slug == None:
+            self.slug = slugify(self.title)
+        super(Category, self).save(*args, **kwargs)
+
+    def post_count(self):
+        return self.post.filter(Category=self).count()
+
+
+class Post(models.Model):
+    STATUS = (
+        ('Active', 'Active'),
+        ('Draft', 'Draft'),
+        ('Disable', 'Disable')
+    )
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
+    title = models.CharField(max_length=100)
+    image = models.FileField(upload_to="image", null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='posts')
+    status = models.CharField(max_length=100, choices=STATUS, default='Active')
+    view = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User, blank=True, related_name='likes_user')
+    slug = models.SlugField(unique=True, null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        verbose_name_plural = 'Post'
+
+    def save(self, *args, **kwargs):
+        if self.slug == '' or self.slug == None:
+            self.slug = slugify(self.title) + '-' + shortuuid.uuid()[:2]
+        super(Post, self).save(*args, **kwargs)
+
+    
+
