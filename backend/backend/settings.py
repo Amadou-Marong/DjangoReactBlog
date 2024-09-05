@@ -229,6 +229,8 @@ JAZZMIN_SETTINGS = {
     },
 }
 
+AUTH_USER_MODEL = 'api.User'
+
 # Jazzmin Tweaks
 
 JAZZMIN_UI_TWEAKS = {
@@ -262,3 +264,6 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success"
     }
 }
+
+
+
