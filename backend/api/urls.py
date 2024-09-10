@@ -7,4 +7,5 @@ urlpatterns = [
     path('user/token/refresh/', TokenRefreshView.as_view()),
     path('user/register/', api_views.RegisterView.as_view()),
     path('user/profile/<int:user_id>/', api_views.ProfileView.as_view()),
+    path('post/category/list/', api_views.CategoryListAPIView.as_view()),
 ]

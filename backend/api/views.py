@@ -49,5 +49,14 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         user = api_models.User.objects.get(id=user_id)
         profile = api_models.Profile.objects.get(user=user)
         return profile
+
+
+class CategoryListAPIView(generics.ListAPIView):
+    serializer_class = api_serializers.CategorySerializer
+    queryset = api_models.Category.objects.all()
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return api_models.Category.objects.all()
     
 
