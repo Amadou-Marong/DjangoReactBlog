@@ -78,10 +78,10 @@ class UserSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = api_models.User
+        model = api_models.Profile
         fields = '__all__'
 
-    def to_represemtation(self, instance):
+    def to_representation(self, instance):
         response = super().to_representation(instance)
         response['user'] = UserSerializer(instance.user).data
         return response
